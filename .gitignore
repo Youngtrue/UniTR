@@ -1,0 +1,16 @@
+__pycache__
+*.DS_Store
+.vscode
+*.so
+*.pkl
+*.egg-info
+pcdet/version.py
+output/
+build/
+data/
+tmp/
+ckpt/*.eval/
+*.ply
+*.json
+lidar_on_image
+img_bbox3d

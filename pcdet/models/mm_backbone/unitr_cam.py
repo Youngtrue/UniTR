@@ -104,8 +104,10 @@ class UniTRCAM(nn.Module):
                     f'lidar_residual_norm_stage_{stage_id}', nn.ModuleList(lidar_norm_list))
 
         # Fuse Backbone
-        fuse_cfg = self.model_cfg.get('FUSE_BACKBONE', None)
-        self.fuse_on = fuse_cfg is not None
+        fuse_cfg = None
+        self.fuse_on = False
+        self.image2lidar_on = False
+        self.lidar2image_on = False
         if self.fuse_on:
             # image2lidar
             image2lidar_cfg = fuse_cfg.get('IMAGE2LIDAR', None)
@@ -171,7 +173,9 @@ class UniTRCAM(nn.Module):
                 batch_dict, multi_feat, multi_pos_embed_list)
         output = multi_feat
         block_id = 0
-        voxel_num = batch_dict['voxel_num']
+        voxel_num = 0
+
+        voxel_num = None
         batch_dict['image_features'] = []
         # block forward
         for stage_id in range(self.stage_num):
@@ -264,7 +268,7 @@ class UniTRCAM(nn.Module):
                 for i in range(self.num_shifts[s]):
                     if b < self.lidar_pos_num and b < self.image_pos_num:
                         shift_pos_embed_list.append(
-                            torch.cat([pos_embed_list[s][b][i], patch_pos_embed_list[s][b][i]], dim=0))
+                            patch_pos_embed_list[s][b][i])
                     elif b < self.lidar_pos_num and b >= self.image_pos_num:
                         shift_pos_embed_list.append(pos_embed_list[s][b][i])
                     elif b >= self.lidar_pos_num and b < self.image_pos_num:
@@ -485,11 +489,9 @@ class SetAttention(nn.Module):
             image_norm = self.norm1(src[voxel_num:])
             src = torch.cat([lidar_norm, image_norm], dim=0)
 
-            lidar_linear2 = self.lidar_linear2(self.lidar_dropout(
-                self.activation(self.lidar_linear1(src[:voxel_num]))))
             image_linear2 = self.linear2(self.dropout(
                 self.activation(self.linear1(src[voxel_num:]))))
-            src2 = torch.cat([lidar_linear2, image_linear2], dim=0)
+            src2 = image_linear2
 
             src = src + self.dropout2(src2)
             lidar_norm2 = self.lidar_norm2(src[:voxel_num])

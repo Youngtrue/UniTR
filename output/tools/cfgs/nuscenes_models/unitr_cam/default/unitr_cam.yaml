@@ -126,7 +126,7 @@ MODEL:
       layer_cfg: {'use_bn': False, 'split_ffn': True, 'split_residual': True}
 
       # fuse backbone config
-      # FUSE_BACKBONE: None
+      FUSE_BACKBONE: False
       #   IMAGE2LIDAR: 
       #     block_start: 3
       #     block_end: 4
