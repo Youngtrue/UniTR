@@ -16,6 +16,7 @@ from .voxelnext import VoxelNeXt
 from .transfusion import TransFusion
 from .bevfusion import BevFusion
 from .unitr import UniTR
+from .unitr_cam import UniTRCAM
 from .unitr_map import UniTRMAP
 __all__ = {
     'Detector3DTemplate': Detector3DTemplate,
@@ -37,6 +38,7 @@ __all__ = {
     'TransFusion': TransFusion,
     'BevFusion': BevFusion,
     'UniTR': UniTR,
+    'UniTRCAM':UniTRCAM,
     'UniTRMAP':UniTRMAP
 }
 

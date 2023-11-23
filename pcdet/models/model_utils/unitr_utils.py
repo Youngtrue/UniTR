@@ -110,7 +110,10 @@ class MapImage2Lidar(nn.Module):
 
     def forward(self, batch_dict):
         '''Get the coordinates of image patch in 3D space.
-
+        Inputs:
+            camera_imgs
+            lidar2image
+            img_aug_matrix
         Returns:
             image2lidar_coords_zyx (tensor): The coordinates of image features 
             (batch size x view num) in 3D space.
